@@ -1,0 +1,10 @@
+sdlvideoviewer
+sdlvideoviewer-rgb565x
+sdlm2mtester-rgb565x
+*.a
+*.mo
+*.o
+*.so
+*~
+*.patch
+*.diff

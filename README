@@ -1,0 +1,18 @@
+Sample Video4Linux applications.
+
+sdlvideoviewer:
+  - Displays /dev/video0 data in a SDL window
+  - /dev/video0 drivers must support YUV 4:2:2
+
+sdlvideoviewer-rgb565x:
+  - Supposed to test mem2mem_testdev driver
+  - Opens /dev/video0 as source of images
+  - Use /dev/video1 (mem2mem_testdev) on source image
+  - Display results (both original and processed image)
+
+sdlm2mtester-rgb565x:
+  - Supposed to test mem2mem_testdev driver
+  - Source image is generated using random number generator
+  - Use /dev/video1 (mem2mem_testdev) on source image
+  - Display results (both original and processed image)
+
