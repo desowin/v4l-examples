@@ -49,6 +49,9 @@
 
 static char *mem2mem_dev_name = NULL;
 
+static int hflip = 0;
+static int vflip = 0;
+
 static size_t WIDTH = 640;
 static size_t HEIGHT = 240;
 /* Spacing between input and output display */
@@ -201,6 +204,26 @@ static void init_mem2mem_dev()
 
     mem2mem_fd = open(mem2mem_dev_name, O_RDWR | O_NONBLOCK, 0);
     perror_exit(mem2mem_fd < 0, "open");
+
+    if (hflip != 0)
+    {
+        ctrl.id = V4L2_CID_HFLIP;
+        ctrl.value = 1;
+        ret = ioctl(mem2mem_fd, VIDIOC_S_CTRL, &ctrl);
+        if (ret != 0)
+            fprintf(stderr, "%s:%d: Set HFLIP failed\n",
+                    __func__, __LINE__);
+    }
+
+    if (vflip != 0)
+    {
+        ctrl.id = V4L2_CID_VFLIP;
+        ctrl.value = 1;
+        ret = ioctl(mem2mem_fd, VIDIOC_S_CTRL, &ctrl);
+        if (ret != 0)
+            fprintf(stderr, "%s:%d: Set VFLIP failed\n",
+                    __func__, __LINE__);
+    }
 
     ctrl.id = V4L2_CID_TRANS_TIME_MSEC;
     ctrl.value = transtime;
@@ -527,10 +550,12 @@ static void usage(FILE * fp, int argc, char **argv)
             "-t | --translen            Transaction length [1]\n"
             "-T | --time                Transaction time in ms [1]\n"
             "-n | --num-frames          Number of frames to process [1000]\n"
+            "-f | --hflip               Horizontal Mirror\n"
+            "-v | --flip                Vertical Mirror\n"
             "", argv[0]);
 }
 
-static const char short_options[] = "o:hx:y:t:T:n:";
+static const char short_options[] = "o:hx:y:t:T:n:fv";
 
 static const struct option long_options[] = {
     {"m2m-device", required_argument, NULL, 'o'},
@@ -540,6 +565,8 @@ static const struct option long_options[] = {
     {"translen", required_argument, NULL, 't'},
     {"time", required_argument, NULL, 'T'},
     {"num-frames", required_argument, NULL, 'n'},
+    {"hflip", no_argument, NULL, 'f'},
+    {"vflip", no_argument, NULL, 'v'},
     {0, 0, 0, 0}
 };
 
@@ -593,6 +620,14 @@ int main(int argc, char **argv)
 
         case 'n':
             num_frames = atoi(optarg);
+            break;
+
+        case 'f':
+            hflip = 1;
+            break;
+
+        case 'v':
+            vflip = 1;
             break;
 
         default:
