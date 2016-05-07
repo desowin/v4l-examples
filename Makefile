@@ -1,4 +1,4 @@
-CC = gcc
+CC ?= gcc
 EXTRA_CFLAGS ?=
 EXTRA_LDFLAGS ?=
 CFLAGS := -Wall -g -ansi -std=c99 $(EXTRA_CFLAGS)
@@ -14,13 +14,13 @@ M2MTESTER_OBJECTS = sdlm2mtester-rgb565x.o
 
 all: sdlvideoviewer sdlvideoviewer-rgb565x sdlm2mtester-rgb565x
 
-sdlvideoviewer: $(VIEWER_OBJECTS) 
+sdlvideoviewer: $(VIEWER_OBJECTS)
 	$(CC) $(LDFLAGS) -o $@ $+ $(LDADD)
 
-sdlvideoviewer-rgb565x: $(VIEWER_RGB565X_OBJECTS) 
+sdlvideoviewer-rgb565x: $(VIEWER_RGB565X_OBJECTS)
 	$(CC) $(LDFLAGS) -o $@ $+ $(LDADD)
 
-sdlm2mtester-rgb565x: $(M2MTESTER_OBJECTS) 
+sdlm2mtester-rgb565x: $(M2MTESTER_OBJECTS)
 	$(CC) $(LDFLAGS) -o $@ $+ $(LDADD)
 
 clean:
